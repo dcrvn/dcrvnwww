@@ -38,7 +38,7 @@ func Init(route *chi.Mux)  {
 		},
 	}, funcMap())
 	sessionManager = sessions.New(sessions.Config{
-		Cookie:  "smgs",
+		Cookie:  "dcrvnwww",
 		Expires: time.Hour * 24 * 365,
 	})
 	route.Use(initMiddleware)

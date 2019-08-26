@@ -4,9 +4,19 @@ import (
 	"bytes"
 	"encoding/gob"
 	"github.com/asdine/storm"
+	"github.com/asdine/storm/q"
 )
 
-type gobCodec int
+type (
+	gobCodec int
+	Pagination struct {
+		SortKey 	string		`json:"-"`
+		SortVal		int			`json:"-"`
+		Page 		int
+		Total		int
+		Records		int
+	}
+)
 
 func (c gobCodec) Marshal(v interface{}) ([]byte, error) {
 	var b bytes.Buffer
@@ -37,4 +47,16 @@ func Init() error {
 	Gob := new(gobCodec)
 	db, err = storm.Open("dcrvnwww.db",storm.Codec(Gob), storm.Batch())
 	return err
+}
+
+func (s *Pagination) Paginate() (limit int,skip int) {
+	if s.Page < 1 {
+		s.Page = 1
+	}
+	if s.Records == 0 {
+		s.Records = 20
+	}
+	limit = s.Records
+	skip = (s.Page - 1) * limit
+	return
 }
