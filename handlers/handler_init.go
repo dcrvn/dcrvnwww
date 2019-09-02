@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/dcrvn/dcrvnwww/helper"
+	"dcrvnwww/helper"
 	"github.com/kataras/go-sessions"
 	"github.com/go-chi/chi"
 	"html/template"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"github.com/dcrvn/dcrvnwww/models"
+	"dcrvnwww/models"
 )
 
 func initMiddleware(next http.Handler) http.Handler  {

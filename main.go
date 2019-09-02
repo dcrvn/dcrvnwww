@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/dcrvn/dcrvnwww/conf"
-	"github.com/dcrvn/dcrvnwww/handlers"
-	"github.com/dcrvn/dcrvnwww/models"
+	"dcrvnwww/conf"
+	"dcrvnwww/handlers"
+	"dcrvnwww/models"
 	"github.com/go-chi/chi"
 	"net/http"
 	"time"

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"github.com/asdine/storm"
-	"github.com/asdine/storm/q"
 )
 
 type (

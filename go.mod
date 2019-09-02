@@ -1,4 +1,4 @@
-module github.com/dcrvn/dcrvnwww
+module dcrvnwww
 
 go 1.12
 
