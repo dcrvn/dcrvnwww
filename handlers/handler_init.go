@@ -42,8 +42,15 @@ func Init(route *chi.Mux)  {
 		Expires: time.Hour * 24 * 365,
 	})
 	route.Use(initMiddleware)
+	route.Handle("/asset/", http.StripPrefix("/asset", http.FileServer(http.Dir("public"))))
 	route.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		tmplHelper.Render(w,r,"home", nil)
+	})
+	//Group for admin
+	route.Route("/admin", func(r chi.Router) {
+		r.Get("/", adminIndex)
+		r.Get("/users", userManage)
+		r.Get("/post", postManage)
 	})
 }
 
@@ -59,4 +66,16 @@ func funcMap() template.FuncMap {
 			return a - b
 		},
 	}
+}
+
+func adminIndex(w http.ResponseWriter, r *http.Request)  {
+	tmplHelper.Render(w, r, "main_admin", nil)
+}
+
+func userManage(w http.ResponseWriter, r *http.Request)  {
+	tmplHelper.Render(w, r, "admin_user_list", nil)
+}
+
+func postManage(w http.ResponseWriter, r *http.Request)  {
+	tmplHelper.Render(w, r, "admin_post_list", nil)
 }
