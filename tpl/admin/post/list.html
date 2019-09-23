@@ -1,5 +1,23 @@
 {{define "admin_post_list"}}
-    {{template "backend-header"}}
-    <h1>List of Posts</h1>
-    {{template "backend-footer"}}
-{{end}}
+{{ template "main_admin_start" }}
+
+<!-- /.row-->
+<div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-5">
+          <h4 class="card-title mb-0">Post Management</h4>
+          <div class="small text-muted">List of Post</div>
+        </div>
+        <!-- /.col-->
+        <div class="col-sm-7 d-none d-md-block">
+          <button class="btn btn-success float-right" type="button">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <!-- /.col-->
+      </div>
+    </div>
+  </div>
+{{ template "main_admin_end" }}
+{{ end }}

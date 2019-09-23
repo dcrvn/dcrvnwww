@@ -6,7 +6,10 @@ import (
 	"github.com/go-chi/chi"
 	"html/template"
 	"net/http"
+	"os"
+	"path/filepath"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -41,8 +44,16 @@ func Init(route *chi.Mux)  {
 		Cookie:  "dcrvnwww",
 		Expires: time.Hour * 24 * 365,
 	})
+
 	route.Use(initMiddleware)
-	route.Handle("/asset/", http.StripPrefix("/asset", http.FileServer(http.Dir("public"))))
+
+	// Init asset
+	workDir, _ := os.Getwd()
+	node_modules := filepath.Join(workDir, "node_modules")
+	asset := filepath.Join(workDir, "public")
+	FileServer(route, "/node_modules/", http.Dir(node_modules))
+	FileServer(route, "/asset/", http.Dir(asset))
+
 	route.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		tmplHelper.Render(w,r,"home", nil)
 	})
@@ -69,7 +80,7 @@ func funcMap() template.FuncMap {
 }
 
 func adminIndex(w http.ResponseWriter, r *http.Request)  {
-	tmplHelper.Render(w, r, "main_admin", nil)
+	tmplHelper.Render(w, r, "admin_dashboard", nil)
 }
 
 func userManage(w http.ResponseWriter, r *http.Request)  {
@@ -78,4 +89,22 @@ func userManage(w http.ResponseWriter, r *http.Request)  {
 
 func postManage(w http.ResponseWriter, r *http.Request)  {
 	tmplHelper.Render(w, r, "admin_post_list", nil)
+}
+
+func FileServer(r chi.Router, path string, root http.FileSystem) {
+	if strings.ContainsAny(path, "{}*") {
+		panic("FileServer does not permit URL parameters.")
+	}
+
+	fs := http.StripPrefix(path, http.FileServer(root))
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fs.ServeHTTP(w, r)
+	}))
 }
